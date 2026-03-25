@@ -1,0 +1,28 @@
+name: Telegram Video Downloader Bot
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: # এটি দিলে আপনি হাত দিয়ে বট চালু/বন্ধ করতে পারবেন
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install python-telegram-bot yt-dlp
+
+      - name: Run Telegram Bot
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }} # গিটহাব সিক্রেট থেকে টোকেন নিচ্ছে
+        run: python bot.py
